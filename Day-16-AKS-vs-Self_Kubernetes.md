@@ -1,85 +1,65 @@
-# 🚀 Kubernetes on Azure - Deployment Models (On-Prem vs VM vs AKS)
+# Day 16 - Kubernetes on Azure (On-Prem vs Azure VM vs AKS)
 
-## 📌 Overview
+## Kubernetes Deployment Options
 
-This document explains different ways to deploy Kubernetes:
-
-- 🏢 On-Premise (Self-Managed)
-- ☁️ Azure VM-Based Kubernetes (Self-Managed)
-- ⚡ AKS (Azure Kubernetes Service - Managed)
-
-It also compares them across maintenance, cost, scalability, and integrations.
+1. On-Premise (Self-Managed)
+2. Azure VM-Based Kubernetes (Self-Managed)
+3. AKS (Azure Kubernetes Service - Managed)
 
 ---
 
-## 🧭 Deployment Options
+## Comparison Table
 
-```mermaid
-flowchart LR
-    A[Kubernetes Deployment Options] --> B[On-Premise]
-    A --> C[Azure VM (Self-Managed)]
-    A --> D[AKS (Managed)]
+| Feature | On-Premise Kubernetes | Azure VM (Self-Managed K8s) | AKS (Managed K8s) |
+|--------|----------------------|-----------------------------|-------------------|
+| **Infrastructure** | Data Center / OpenStack | Azure Virtual Machines | Azure Managed Service |
+| **Cluster Management** | Fully manual | Manual (on VMs) | Managed by Azure |
+| **Control Plane** | Self-managed | Self-managed | Fully managed by Azure |
+| **Maintenance** | High (manual upgrades, patching) | Moderate | Low (Azure handles updates) |
+| **Cost** | High initial cost (hardware) | Pay-as-you-go | Optimized (pay for nodes only) |
+| **Scaling** | Manual | Manual / Partial Auto | Easy Autoscaling |
+| **Availability** | Limited | Better than on-prem | High availability |
+| **Integration** | Manual setup | Azure integrations possible | Native Azure integrations |
+| **Security** | Fully manual | Cloud-assisted | Built-in + Azure AD integration |
+| **Load Balancer** | MetalLB (manual) | Azure LB (configured) | Built-in Azure Load Balancer |
+| **Storage (CSI)** | Manual setup | Azure Disk/Files | Native CSI integration |
+| **Secrets Management** | Manual | Possible with Azure | Azure Key Vault integration |
+| **Node Management** | Manual | VM-based | Node Pools (VMSS) |
+| **Autoscaling** | Not available / Manual | Possible but complex | Built-in Autoscaling |
+| **Ease of Use** | Complex | Moderate | Easy |
 
-    B --> B1[Data Center]
-    B --> B2[Manual Cluster Setup]
+---
 
-    C --> C1[Azure VMs]
-    C --> C2[Manual K8s Setup]
+## AKS Architecture Overview
 
-    D --> D1[Managed Control Plane]
-    D --> D2[Node Pools (VMSS)]
+### Control Plane (Managed by Azure)
+- API Server  
+- Scheduler  
+- etcd  
 
+### Node Pools
+- Runs on VM Scale Sets (VMSS)
+- Supports autoscaling
+- High availability
 
-flowchart TD
-    DC[Data Center] --> OS[OpenStack / Infra]
-    OS --> M[Master Node]
-    OS --> W1[Worker Node 1]
-    OS --> W2[Worker Node 2]
+---
 
-    subgraph Kubernetes Cluster
-        M
-        W1
-        W2
-    end
+## Infrastructure as Code (IaC)
 
+- Tool: Terraform
 
-flowchart TD
-    AZ[Azure] --> VM1[VM - Master]
-    AZ --> VM2[VM - Worker 1]
-    AZ --> VM3[VM - Worker 2]
+### Usage:
+- Automate provisioning of:
+  - On-Prem infrastructure
+  - Azure VMs
+  - AKS clusters
 
-    subgraph Self-Managed Cluster
-        VM1
-        VM2
-        VM3
-    end
+---
 
+## Summary
 
-flowchart TD
-    AZ[Azure AKS] --> CP[Managed Control Plane]
-    AZ --> NP[Node Pool (VMSS)]
+- **On-Prem** → Full control, high maintenance  
+- **Azure VM** → Cloud infra but still manual K8s  
+- **AKS** → Fully managed, scalable, production-ready  
 
-    CP --> API[API Server]
-    CP --> SCH[Scheduler]
-    CP --> ETCD[etcd]
-
-    NP --> N1[Worker Node 1]
-    NP --> N2[Worker Node 2]
-
-
-| Feature                | On-Premise Kubernetes | Azure VM (Self-Managed K8s) | AKS (Managed K8s)     |
-| ---------------------- | --------------------- | --------------------------- | --------------------- |
-| **Infrastructure**     | Data Center           | Azure VMs                   | Azure Managed         |
-| **Cluster Management** | Manual                | Manual                      | Managed               |
-| **Control Plane**      | Self-managed          | Self-managed                | Managed by Azure      |
-| **Maintenance**        | High                  | Moderate                    | Low                   |
-| **Cost**               | High (hardware)       | Pay-as-you-go               | Optimized             |
-| **Scaling**            | Manual                | Manual / Partial            | Auto-scaling          |
-| **Availability**       | Limited               | Better                      | High                  |
-| **Integration**        | Manual                | Azure-supported             | Native Azure          |
-| **Security**           | Manual                | Improved                    | Built-in + Azure AD   |
-| **Load Balancer**      | MetalLB               | Azure LB                    | Built-in              |
-| **Storage**            | Manual CSI            | Azure Disk/File             | Native CSI            |
-| **Secrets**            | Manual                | Azure supported             | Key Vault integration |
-| **Node Management**    | Manual                | VM-based                    | Node Pools (VMSS)     |
-| **Ease of Use**        | Hard                  | Medium                      | Easy                  |
+---
