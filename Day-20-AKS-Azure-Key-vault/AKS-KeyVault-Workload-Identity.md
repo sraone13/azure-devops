@@ -15,13 +15,7 @@ az group create --name sravan-keyvault-demo1 --location centralindia
 ### 🔹 Create AKS Cluster with Key Vault Integration
 
 ```bash
-az aks create \
-  --name sravan-keyvault-demo-cluster \
-  --resource-group sravan-keyvault-demo1 \
-  --node-count 1 \
-  --enable-addons azure-keyvault-secrets-provider \
-  --enable-oidc-issuer \
-  --enable-workload-identity
+az aks create --name sravan-keyvault-demo-cluster --resource-group sravan-keyvault-demo1 --node-count 1 --enable-addons azure-keyvault-secrets-provider --enable-oidc-issuer --enable-workload-identity
 ```
 
 ---
@@ -29,9 +23,7 @@ az aks create \
 ## 2️⃣ Connect to AKS Cluster
 
 ```bash
-az aks get-credentials \
-  --resource-group sravan-keyvault-demo1 \
-  --name sravan-keyvault-demo-cluster
+az aks get-credentials --resource-group sravan-keyvault-demo1 --name sravan-keyvault-demo-cluster
 ```
 
 ### ✅ Verify Context
@@ -45,8 +37,7 @@ kubectl config current-context
 ## 3️⃣ Verify CSI Driver Installation
 
 ```bash
-kubectl get pods -n kube-system \
-  -l 'app in (secrets-store-csi-driver,secrets-store-provider-azure)' -o wide
+kubectl get pods -n kube-system -l 'app in (secrets-store-csi-driver,secrets-store-provider-azure)' -o wide
 ```
 
 ---
@@ -56,11 +47,7 @@ kubectl get pods -n kube-system \
 ### 🔹 Create Key Vault (RBAC Enabled)
 
 ```bash
-az keyvault create \
-  -n aks-demo-sravan \
-  -g sravan-keyvault-demo1 \
-  -l centralindia \
-  --enable-rbac-authorization
+az keyvault create -n aks-demo-sravan -g sravan-keyvault-demo1 -l centralindia --enable-rbac-authorization
 ```
 
 ### ⚠️ If Provider Not Registered
@@ -109,15 +96,9 @@ az identity create --name $UAMI --resource-group $RESOURCE_GROUP
 ```
 
 ```bash
-export USER_ASSIGNED_CLIENT_ID=$(az identity show \
-  -g $RESOURCE_GROUP \
-  --name $UAMI \
-  --query 'clientId' -o tsv)
+export USER_ASSIGNED_CLIENT_ID=$(az identity show -g $RESOURCE_GROUP --name $UAMI --query 'clientId' -o tsv)
 
-export IDENTITY_TENANT=$(az aks show \
-  --name $CLUSTER_NAME \
-  --resource-group $RESOURCE_GROUP \
-  --query identity.tenantId -o tsv)
+export IDENTITY_TENANT=$(az aks show --name $CLUSTER_NAME --resource-group $RESOURCE_GROUP --query identity.tenantId -o tsv)
 ```
 
 ---
@@ -127,10 +108,7 @@ export IDENTITY_TENANT=$(az aks show \
 ```bash
 export KEYVAULT_SCOPE=$(az keyvault show --name $KEYVAULT_NAME --query id -o tsv)
 
-az role assignment create \
-  --role "Key Vault Administrator" \
-  --assignee $USER_ASSIGNED_CLIENT_ID \
-  --scope $KEYVAULT_SCOPE
+az role assignment create --role "Key Vault Administrator" --assignee $USER_ASSIGNED_CLIENT_ID --scope $KEYVAULT_SCOPE
 ```
 
 ---
@@ -138,10 +116,7 @@ az role assignment create \
 ### 🔹 Get OIDC Issuer URL
 
 ```bash
-export AKS_OIDC_ISSUER=$(az aks show \
-  --resource-group $RESOURCE_GROUP \
-  --name $CLUSTER_NAME \
-  --query "oidcIssuerProfile.issuerUrl" -o tsv)
+export AKS_OIDC_ISSUER=$(az aks show --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME --query "oidcIssuerProfile.issuerUrl" -o tsv)
 
 echo $AKS_OIDC_ISSUER
 ```
@@ -182,12 +157,7 @@ export FEDERATED_IDENTITY_NAME="aksfederatedidentity"
 ```
 
 ```bash
-az identity federated-credential create \
-  --name $FEDERATED_IDENTITY_NAME \
-  --identity-name $UAMI \
-  --resource-group $RESOURCE_GROUP \
-  --issuer ${AKS_OIDC_ISSUER} \
-  --subject system:serviceaccount:${SERVICE_ACCOUNT_NAMESPACE}:${SERVICE_ACCOUNT_NAME}
+az identity federated-credential create --name $FEDERATED_IDENTITY_NAME --identity-name $UAMI --resource-group $RESOURCE_GROUP --issuer ${AKS_OIDC_ISSUER} --subject system:serviceaccount:${SERVICE_ACCOUNT_NAMESPACE}:${SERVICE_ACCOUNT_NAME}
 ```
 
 ---
@@ -265,8 +235,7 @@ kubectl exec busybox-secrets-store-inline-wi -- ls /mnt/secrets-store/
 ### 🔹 Read Secret
 
 ```bash
-kubectl exec busybox-secrets-store-inline-wi -- \
-  sh -c "cat /mnt/secrets-store/sravan123"
+kubectl exec busybox-secrets-store-inline-wi -- sh -c "cat /mnt/secrets-store/sravan123"
 ```
 
 ---
