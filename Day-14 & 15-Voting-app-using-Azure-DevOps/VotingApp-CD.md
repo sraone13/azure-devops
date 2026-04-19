@@ -47,8 +47,7 @@ kubectl get pods
 ```bash
 kubectl create namespace argocd
 
-kubectl apply -n argocd --server-side --force-conflicts \
--f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl apply -n argocd --server-side --force-conflicts -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 ```
 
 ### ✅ Verify Installation
@@ -213,11 +212,7 @@ Add new stage in `vote.yml`:
 ## 🔹 Create Kubernetes Secret
 
 ```bash
-kubectl create secret docker-registry acr-secret \
---namespace default \
---docker-server=<acr-name>.azurecr.io \
---docker-username=<username> \
---docker-password=<password>
+kubectl create secret docker-registry acr-secret --namespace default --docker-server=<acr-name>.azurecr.io --docker-username=<username> --docker-password=<password>
 ```
 
 ---

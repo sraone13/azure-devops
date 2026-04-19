@@ -169,7 +169,7 @@ tar zxvf vsts-agent-linux-x64-4.270.0.tar.gz
 
 Provide:
 
-* Server URL → https://dev.azure.com/<organization>
+* Server URL → https://dev.azure.com/sravanpeddapally
 * PAT Token (create from Azure DevOps)
 * Agent Pool → azureagent
 * Agent Name → any
