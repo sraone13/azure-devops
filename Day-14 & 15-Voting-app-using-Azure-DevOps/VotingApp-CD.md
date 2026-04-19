@@ -268,7 +268,10 @@ Add new stage in `vote.yml`:
 
 ## 🔹 Enable Admin Access in ACR
 
-* Go to ACR → Access Keys → Enable Admin
+* Go to Container registery --> Click on the Registery --> Settings → Access Keys → Enable Admin --> you will see the Password
+
+You will see acr,username and paswword
+
 
 ---
 
@@ -297,8 +300,8 @@ Check everything:
 
 ```bash
 kubectl get pods
-kubectl get svc
-kubectl get nodes -o wide
+kubectl get svc  --> Copt the vote app port number and give the inbound rule in VMSS for the port
+kubectl get nodes -o wide -->here you will get the external ip adddress
 ```
 
 ---
