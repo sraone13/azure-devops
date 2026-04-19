@@ -117,13 +117,95 @@ http://<node-ip>:<nodeport>
 
 # 🔗 Step 5: Connect ArgoCD with Azure Repo
 
-1. Generate PAT Token in Azure DevOps
-2. Go to ArgoCD → Settings → Repositories
-3. Add repository:
+### 🔗 Connect Argo CD to Azure DevOps Repository
 
-   * Method: HTTPS
-   * Paste repo URL
-   * Replace password with PAT token
+#### 📌 Step 1: Get Repository URL
+
+* Go to **Azure DevOps**
+* Open your project → Repository
+* Click **Clone**
+* Copy the HTTPS URL
+
+Example:
+
+```
+https://sravanpeddapally@dev.azure.com/sravanpeddapally/vote-app-1/_git/vote-app-1
+```
+
+---
+
+#### 📌 Step 2: Replace Username with PAT (Personal Access Token)
+
+⚠️ Azure DevOps requires authentication using PAT
+
+Format:
+
+```
+https://<PAT>@dev.azure.com/<org>/<project>/_git/<repo>
+```
+
+Example:
+
+```
+https://<PAT>@dev.azure.com/sravanpeddapally/vote-app-1/_git/vote-app-1
+```
+
+---
+
+#### 📌 Step 3: Open Argo CD UI
+
+* Login to Argo CD
+* Go to:
+
+  ```
+  Settings → Repositories
+  ```
+
+---
+
+#### 📌 Step 4: Connect Repository
+
+* Click **“Connect Repo”**
+* Fill details:
+
+| Field          | Value                           |
+| -------------- | ------------------------------- |
+| Repository URL | Paste PAT-based URL             |
+| Username       | Can leave empty OR use anything |
+| Password       | (Optional if PAT in URL)        |
+
+---
+
+#### 📌 Step 5: Click Connect
+
+* Click **Connect**
+* If successful → Repo will show **“Successful”**
+
+---
+
+### ✅ Important Notes
+
+* PAT must have:
+
+  * ✅ Code (Read) permission
+* Avoid exposing PAT in scripts or logs
+* Use **Secret management** in production
+
+---
+
+### 🚀 Best Practice (Recommended)
+
+Instead of embedding PAT in URL:
+
+* Use:
+
+  * Username: anything
+  * Password: PAT
+
+This is more secure than putting PAT in URL.
+
+---
+
 
 ---
 
