@@ -183,26 +183,7 @@ https://<PAT>@dev.azure.com/sravanpeddapally/vote-app-1/_git/vote-app-1
 
 ---
 
-### ✅ Important Notes
 
-* PAT must have:
-
-  * ✅ Code (Read) permission
-* Avoid exposing PAT in scripts or logs
-* Use **Secret management** in production
-
----
-
-### 🚀 Best Practice (Recommended)
-
-Instead of embedding PAT in URL:
-
-* Use:
-
-  * Username: anything
-  * Password: PAT
-
-This is more secure than putting PAT in URL.
 
 ---
 
