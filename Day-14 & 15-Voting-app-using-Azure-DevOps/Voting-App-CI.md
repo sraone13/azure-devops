@@ -232,8 +232,10 @@ stages:
     steps:
     - task: Docker@2
       inputs:
-        command: build
-        Dockerfile: vote/Dockerfile
+        containerRegistry: '$(dockerRegistryServiceConnection)'
+        repository: '$(imageRepository)'
+        command: 'build'
+        Dockerfile: 'voting/Dockerfile'
         tags: '$(tag)'
 
 - stage: Push
@@ -242,7 +244,9 @@ stages:
     steps:
     - task: Docker@2
       inputs:
-        command: push
+        containerRegistry: '$(dockerRegistryServiceConnection)'
+        repository: '$(imageRepository)'
+        command: 'push'
         tags: '$(tag)'
 ```
 
@@ -272,8 +276,10 @@ stages:
     steps:
     - task: Docker@2
       inputs:
-        command: build
-        Dockerfile: worker/Dockerfile
+        containerRegistry: '$(dockerRegistryServiceConnection)'
+        repository: '$(imageRepository)'
+        command: 'build'
+        Dockerfile: 'worker/Dockerfile'
         tags: '$(tag)'
 
 - stage: Push
@@ -282,7 +288,9 @@ stages:
     steps:
     - task: Docker@2
       inputs:
-        command: push
+        containerRegistry: '$(dockerRegistryServiceConnection)'
+        repository: '$(imageRepository)'
+        command: 'push'
         tags: '$(tag)'
 ```
 
